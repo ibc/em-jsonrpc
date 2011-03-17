@@ -10,7 +10,8 @@ require "timeout"
 
 class TestJsonRPC < Test::Unit::TestCase
 
-  def setup
+  def initialize(*args)
+    super
     @socket = TCPSocket.new "127.0.0.1", 8888
     @parser = Yajl::Parser.new
     @parser.on_parse_complete = method(:response_parsed)
@@ -25,11 +26,11 @@ class TestJsonRPC < Test::Unit::TestCase
       Timeout.timeout(0.2) do
         while true do
           begin
-            data = @socket.recv_nonblock 500
+            data = @socket.recv_nonblock 1024
             @parser << data
             return @response if @response
-          rescue Errno::EAGAIN
-            sleep 0.01
+          rescue IO::WaitReadable #Errno::EAGAIN
+            IO.select([@socket])
             retry
           end
         end

@@ -9,32 +9,31 @@ require "em-jsonrpc/server"
 class MyJsonRpcServer < EM::JsonRPC::Server
 
   def receive_request(request)
-    #puts "request received:\n#{request.inspect}"
     puts "request received:"
     puts "- id     : #{request.id.inspect}"
     puts "- method : #{request.rpc_method.inspect}"
     puts "- params : #{request.params.inspect}"
 
     case request.rpc_method
-      
+    
     when /^(subtract|\-)$/
       if request.params.is_a? Array
-        minued = request.params[0]
-        subtrahend = request.params[1]
+        minued = request.params[0].to_i
+        subtrahend = request.params[1].to_i
       elsif request.params.is_a? Hash
-        minued = request.params[:minuend]
-        subtrahend = request.params[:subtrahend]
+        minued = request.params[:minuend].to_i
+        subtrahend = request.params[:subtrahend].to_i
       end
       result = minued - subtrahend
       request.reply_result(result)
 
     when /^(sum|\+)$/
       if request.params.is_a? Array
-        sum1 = request.params[0]
-        sum2 = request.params[1]
+        sum1 = request.params[0].to_i
+        sum2 = request.params[1].to_i
       elsif request.params.is_a? Hash
-        sum1 = request.params[:minuend]
-        sum2 = request.params[:subtrahend]
+        sum1 = request.params[:minuend].to_i
+        sum2 = request.params[:subtrahend].to_i
       end
       result = sum1 + sum2
       request.reply_result(result)
@@ -52,11 +51,11 @@ EM.run do
   
   EM::JsonRPC.start_tcp_server("0.0.0.0", 8888, MyJsonRpcServer, yajl_options) do |conn|
     puts "\nnew TCP connection"
-    conn.set_comm_inactivity_timeout 3
+    conn.set_comm_inactivity_timeout 120
   end
 
   EM::JsonRPC.start_unix_domain_server("/tmp/borrame", MyJsonRpcServer, yajl_options) do |conn|
     puts "\nnew UnixSocket connection"
-    conn.set_comm_inactivity_timeout 30
+    conn.set_comm_inactivity_timeout 120
   end
 end
