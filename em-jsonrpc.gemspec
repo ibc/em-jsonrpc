@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
     lib/em-jsonrpc/version.rb
     lib/em-jsonrpc/constants.rb
     lib/em-jsonrpc/server.rb
-    lib/em-jsonrpc/request.rb
+    lib/em-jsonrpc/client.rb
     test/test-em-jsonrpc-client.rb
     test/test-em-jsonrpc-server.rb
   }
