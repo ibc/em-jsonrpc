@@ -12,13 +12,13 @@ module EventMachine::JsonRPC
     DEFAULT_REQUEST_TIMEOUT = 2
 
     attr_reader :pending_requests
-    
+
     def initialize(host, port, request_timeout = nil, parser_options = {})
       @host = host
       @port = port
       @request_timeout = request_timeout || DEFAULT_REQUEST_TIMEOUT
       @parser_options = parser_options
-           
+
       if parser_options and parser_options[:symbolize_keys]
         @key_jsonrpc = :jsonrpc
         @key_id = :id
@@ -34,18 +34,16 @@ module EventMachine::JsonRPC
         @key_code = KEY_CODE
         @key_message = KEY_MESSAGE
       end
-      
+
       @pending_requests = {}
       @connected = false
     end
 
     def post_init
-      puts "--- post_init(), @connected = #{@connected}"
       @encoder = Yajl::Encoder.new
     end
 
     def connection_completed
-      puts "--- connection_completed()"
       @connected = true
       @parser = Yajl::Parser.new  @parser_options
       @parser.on_parse_complete = method(:obj_parsed)
@@ -54,7 +52,6 @@ module EventMachine::JsonRPC
     end
 
     def unbind
-      puts "--- unbind(), @connected = #{@connected}"
       @pending_requests.clear
 
       if @connected
@@ -83,7 +80,6 @@ module EventMachine::JsonRPC
     end
 
     def send_request(method, params=nil)
-      puts "--- send_request()"
       id = SecureRandom.hex 4
       request = Request.new self, id
       request.timeout @request_timeout
@@ -96,7 +92,7 @@ module EventMachine::JsonRPC
       }
       jsonrpc_request[KEY_PARAMS] = params if params
       send_data @encoder.encode jsonrpc_request
-      
+
       return request
     end
 
@@ -106,9 +102,9 @@ module EventMachine::JsonRPC
         parse_data(data)
       when :ignore
         nil
-      end    
+      end
     end
-    
+
     def parse_data(data)
       begin
         @parser << data
@@ -135,7 +131,7 @@ module EventMachine::JsonRPC
       return unless request = @pending_requests[id]
 
       request.delete
-      
+
       unless obj[@key_jsonrpc] == "2.0"
         request.fail :invalid_response, "invalid response: doesn't include \"jsonrpc\": \"2.0\""
         return
@@ -160,7 +156,7 @@ module EventMachine::JsonRPC
 
     def parsing_error
     end
-    
+
     def cancel_pending_requests description
       @pending_requests.each_value do |request|
         request.fail :canceled, "request canceled: #{description}"
@@ -180,7 +176,7 @@ module EventMachine::JsonRPC
       def delete
         @client.pending_requests.delete @id
       end
-      
+
       # Override EM::Deferrable#timeout method so the errback is executed passing
       # a :request_timeout single argument.
       # Also, the request is removed from the list of pending requests.
