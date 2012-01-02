@@ -1,10 +1,12 @@
+# -*- encoding: utf-8 -*-
+
 require "./lib/em-jsonrpc/version"
 
 Gem::Specification.new do |spec|
   spec.name = "em-jsonrpc"
   spec.version = EventMachine::JsonRPC::VERSION
   spec.date = Time.now
-  spec.authors = ["Inaki Baz Castillo"]
+  spec.authors = ["Iñaki Baz Castillo"]
   spec.email = "ibc@aliax.net"
   spec.summary = "JSON RCP 2.0 client and server for EventMachine over TCP or UnixSocket"
   spec.homepage = "https://github.com/ibc/em-jsonrpc"
