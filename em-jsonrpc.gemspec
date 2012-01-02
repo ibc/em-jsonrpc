@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.name = "em-jsonrpc"
   spec.version = EventMachine::JsonRPC::VERSION
   spec.date = Time.now
-  spec.authors = ["Iñaki Baz Castillo"]
+  spec.authors = ["Inaki Baz Castillo"]
   spec.email = "ibc@aliax.net"
   spec.summary = "JSON RCP 2.0 client and server for EventMachine over TCP or UnixSocket"
   spec.homepage = "https://github.com/ibc/em-jsonrpc"
@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
     lib/em-jsonrpc/version.rb
     lib/em-jsonrpc/constants.rb
     lib/em-jsonrpc/server.rb
-    lib/em-jsonrpc/request.rb
+    lib/em-jsonrpc/client.rb
     test/test-em-jsonrpc-client.rb
     test/test-em-jsonrpc-server.rb
   }
