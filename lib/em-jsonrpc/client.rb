@@ -1,11 +1,3 @@
-require "eventmachine"
-require "yajl"
-require "securerandom"
-
-require "em-jsonrpc/version"
-require "em-jsonrpc/constants"
-
-
 module EventMachine::JsonRPC
 
   class Client < EM::Connection
@@ -191,9 +183,6 @@ module EventMachine::JsonRPC
     end  # class Request
 
   end  # class Client
-
-
-  class ConnectionError < StandardError ; end
 
 
   def self.connect_tcp(host, port, handler, request_timeout=nil, parser_options={}, &block)

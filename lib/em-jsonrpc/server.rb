@@ -1,18 +1,11 @@
-require "eventmachine"
-require "yajl"
-
-require "em-jsonrpc/version"
-require "em-jsonrpc/constants"
-
-
 module EventMachine::JsonRPC
 
   class Server < EM::Connection
     attr_reader :encoder
-    
+
     def initialize(*options)
       parser_options = options.first || {}
-      
+
       if parser_options[:symbolize_keys]
         @key_jsonrpc = :jsonrpc
         @key_id = :id
@@ -24,10 +17,10 @@ module EventMachine::JsonRPC
         @key_method = KEY_METHOD
         @key_params = KEY_PARAMS
       end
-      
+
       @parser = Yajl::Parser.new parser_options
       @parser.on_parse_complete = method(:obj_parsed)
-      
+
       @state = :data
     end
 
@@ -53,7 +46,7 @@ module EventMachine::JsonRPC
 
     def obj_parsed(obj)
       @encoder ||= Yajl::Encoder.new
-      
+
       case obj
       # Individual request/notification.
       when Hash
@@ -79,19 +72,19 @@ module EventMachine::JsonRPC
           return false
         end
       end
-        
+
       unless obj[@key_jsonrpc] == "2.0"
         invalid_request obj, CODE_INVALID_REQUEST, MSG_INVALID_REQ_JSONRPC
         reply_error id, CODE_INVALID_REQUEST, MSG_INVALID_REQ_JSONRPC
         return false
       end
-      
+
       unless (method = obj[@key_method]).is_a? String
         invalid_request obj, CODE_INVALID_REQUEST, MSG_INVALID_REQ_METHOD
         reply_error id, CODE_INVALID_REQUEST, MSG_INVALID_REQ_METHOD
         return false
       end
-      
+
       if (params = obj[@key_params])
         unless params.is_a? Array or params.is_a? Hash
           invalid_request obj, CODE_INVALID_REQUEST, MSG_INVALID_REQ_PARAMS
@@ -137,7 +130,7 @@ module EventMachine::JsonRPC
     def batch_not_supported_error(obj)
       $stderr.puts "batch request received but not implemented"
     end
-    
+
     # This method could be overriden in the user's inherited class.
     def invalid_request(obj, code, message=nil)
       $stderr.puts "error #{code}: #{message}"

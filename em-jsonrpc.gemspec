@@ -13,9 +13,9 @@ Gem::Specification.new do |spec|
   spec.description =
     "em-jsonrpc provides a JSON RPC 2.0 TCP/UnixSocket client and server to be integrated within EventMachine reactor"
   spec.required_ruby_version = ">= 1.8.7"
-  spec.add_dependency "eventmachine"
-  spec.add_dependency "yajl-ruby", ">= 0.8.0"
+  spec.add_dependency "yajl-ruby", ">= 1.1.0"
   spec.files = %w{
+    lib/em-jsonrpc.rb
     lib/em-jsonrpc/version.rb
     lib/em-jsonrpc/constants.rb
     lib/em-jsonrpc/server.rb
