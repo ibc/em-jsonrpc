@@ -20,8 +20,9 @@ Gem::Specification.new do |spec|
     lib/em-jsonrpc/constants.rb
     lib/em-jsonrpc/server.rb
     lib/em-jsonrpc/client.rb
-    test/test-em-jsonrpc-client.rb
-    test/test-em-jsonrpc-server.rb
+    test/em-jsonrpc-client.rb
+    test/jsonrpc-client.rb
+    test/em-jsonrpc-server.rb
   }
   spec.has_rdoc = false
 end
